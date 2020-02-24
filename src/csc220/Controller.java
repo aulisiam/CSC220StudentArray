@@ -19,7 +19,7 @@ public class Controller implements Initializable
     @FXML
     TextField searchForField;
     
-    private OrderByGrade orderByGrade;
+   // private OrderByGrade orderByGrade;
     private OrderByName orderByName;
     
     private Comparator<Student> compareByGrade;
@@ -69,8 +69,16 @@ public class Controller implements Initializable
        //  Sequential search
 //       int start = Student.indexOfFirstMatchingBy(orderedByGrade, key, orderByGrade);
        int start = Arrays.binarySearch(orderedByGrade, key, compareByGrade);
+       
        if (start < 0)  //  Grade not found
            return;
+       
+       //  Here's what we were missing on Monday!
+       while (start > 0 && orderedByGrade[start-1].getGrade() == gradeToFind)
+       {
+           start -= 1;
+       }
+       
        for (int i = start; i < students.length; i += 1)
        {
            if (orderedByGrade[i].getGrade() != gradeToFind)
@@ -82,7 +90,7 @@ public class Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        orderByGrade = new OrderByGrade();
+//        orderByGrade = new OrderByGrade();
         orderByName = new OrderByName();
         
 //        compareByGrade = new ComparatorByGrade();
