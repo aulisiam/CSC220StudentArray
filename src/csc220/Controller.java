@@ -2,6 +2,7 @@ package csc220;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +21,8 @@ public class Controller implements Initializable
     
     private OrderByGrade orderByGrade;
     private OrderByName orderByName;
+    
+    private Comparator<Student> compareByGrade;
     
     private Student[] students;
     private Student[] orderedByGrade;
@@ -64,7 +67,8 @@ public class Controller implements Initializable
        Student key = new Student("", gradeToFind);
        
        //  Sequential search
-       int start = Student.indexOfFirstMatchingBy(orderedByGrade, key, orderByGrade);
+//       int start = Student.indexOfFirstMatchingBy(orderedByGrade, key, orderByGrade);
+       int start = Arrays.binarySearch(orderedByGrade, key, compareByGrade);
        if (start < 0)  //  Grade not found
            return;
        for (int i = start; i < students.length; i += 1)
@@ -80,6 +84,9 @@ public class Controller implements Initializable
     {
         orderByGrade = new OrderByGrade();
         orderByName = new OrderByName();
+        
+//        compareByGrade = new ComparatorByGrade();
+        compareByGrade = (s1, s2) -> Character.compare(s1.getGrade(), s2.getGrade());
         //  Add some students to the array.
         students = new Student[]
         {
@@ -90,7 +97,9 @@ public class Controller implements Initializable
             new Student("Lena Horne", 'A'),
         };
         orderedByGrade = Arrays.copyOf(students, students.length);
-        Student.sortBy(orderedByGrade, orderByGrade);
+//        Student.sortBy(orderedByGrade, orderByGrade);
+
+        Arrays.sort(orderedByGrade, compareByGrade);
         orderedByName = Arrays.copyOf(students, students.length);
         Student.sortBy(orderedByName, orderByName);
 
