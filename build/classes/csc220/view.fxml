@@ -10,10 +10,10 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="csc220.Controller">
     <HBox>
-         <Button text="A" onAction="#findAs" />
-         <Button text="B" onAction="#findBs" />
-         <Button text="C" onAction="#findCs" />
-         <Button text="D" onAction="#findDs" />
+         <Button text="A" onAction="#searchForByGrade" />
+         <Button text="B" onAction="#searchForByGrade" />
+         <Button text="C" onAction="#searchForByGrade" />
+         <Button text="D" onAction="#searchForByGrade" />
          <Label  text="Search for:" />
          <TextField fx:id="searchForField" text="" onAction="#searchForByName" />
     </HBox>

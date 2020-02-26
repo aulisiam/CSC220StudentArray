@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -28,61 +29,61 @@ public class Controller implements Initializable
     private Student[] orderedByGrade;
     private Student[] orderedByName;
     
+    private interface Displayer
+    {
+        public String getDisplayInfo(Student s);
+    }
+        
     @FXML
-    private void findAs(ActionEvent event){display('A');}
-    @FXML
-    private void findBs(ActionEvent event){display('B');}
-    @FXML
-    private void findCs(ActionEvent event){display('C');}
-    @FXML
-    private void findDs(ActionEvent event){display('D');}
+    private void searchForByGrade(ActionEvent event)
+    {
+        Button b = (Button)event.getSource();  // "Typecast" to Button
+        char gradeToFind = b.getText().charAt(0);
+        outputArea.setText("Students achieving an " + gradeToFind + "\n");
+       
+        Student key = new Student("", gradeToFind);
+
+        display(orderedByGrade, key, compareByGrade, s -> s.getName());
+    }
     
     @FXML
     private void searchForByName(ActionEvent event)
     {
         System.out.println("Search for " + searchForField.getText());
-        
+        outputArea.setText("");
         String nameToFind = searchForField.getText();
         Student key = new Student(nameToFind, ' ');
         
-        outputArea.setText("Search for " + nameToFind + "\n");
-       
-       //  Sequential search
-       int start = Arrays.binarySearch(orderedByName, key, compareByName);
-       if (start < 0)  //  Name not found
-           return;
-       for (int i = start; i < orderedByName.length; i += 1)
-       {
-           if (!orderedByName[i].getName().equals(nameToFind))
-               return;
-            outputArea.appendText(orderedByName[i].toString() + "\n");
-       }
+        display(orderedByName, key, compareByName, (s) -> s.toString());
  
     }
             
-    private void display(char gradeToFind)
+    private void display(Student[] index, 
+                         Student key, 
+                         Comparator<Student> comparator,
+                         Displayer displayer)
     {
-       outputArea.setText("Students achieving an " + gradeToFind + "\n");
-       
-       Student key = new Student("", gradeToFind);
        
        //  Sequential search
-       int start = Arrays.binarySearch(orderedByGrade, key, compareByGrade);
+       int start = Arrays.binarySearch(index, key, comparator);
        
        if (start < 0)  //  Grade not found
            return;
        
        //  Here's what we were missing on Monday!
-       while (start > 0 && orderedByGrade[start-1].getGrade() == gradeToFind)
+//       while (start > 0 && orderedByGrade[start-1].getGrade() == gradeToFind)
+       while (start > 0 && comparator.compare(index[start-1], key) == 0)
        {
            start -= 1;
        }
        
-       for (int i = start; i < students.length; i += 1)
+       for (int i = start; i < index.length; i += 1)
        {
-           if (orderedByGrade[i].getGrade() != gradeToFind)
+//           if (orderedByGrade[i].getGrade() != gradeToFind)
+            if (comparator.compare(index[i], key) != 0)
                return;
-            outputArea.appendText(orderedByGrade[i].getName() + "\n");
+            String s = displayer.getDisplayInfo(index[i]);
+            outputArea.appendText(s + "\n");
        }
     }
 
@@ -97,11 +98,13 @@ public class Controller implements Initializable
         //  Add some students to the array.
         students = new Student[]
         {
+            new Student("Lena Horne", 'D'),
             new Student("Edgar Rice Burroughs", 'B'),
             new Student("Lauren Bacall", 'B'),
             new Student("Tony Blair", 'C'),
             new Student("Isaac Asimov", 'B'),
             new Student("Lena Horne", 'A'),
+            new Student("Tony Blair", 'A'),
         };
         
         orderedByGrade = Arrays.copyOf(students, students.length);
