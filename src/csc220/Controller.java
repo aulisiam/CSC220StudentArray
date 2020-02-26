@@ -19,11 +19,11 @@ public class Controller implements Initializable
     @FXML
     TextField searchForField;
     
-   // private OrderByGrade orderByGrade;
-    private OrderByName orderByName;
-    
+    //  Comparators    
     private Comparator<Student> compareByGrade;
+    private Comparator<Student> compareByName;
     
+    //  Indexes for various searches
     private Student[] students;
     private Student[] orderedByGrade;
     private Student[] orderedByName;
@@ -48,7 +48,7 @@ public class Controller implements Initializable
         outputArea.setText("Search for " + nameToFind + "\n");
        
        //  Sequential search
-       int start = Student.indexOfFirstMatchingBy(orderedByName, key, orderByName);
+       int start = Arrays.binarySearch(orderedByName, key, compareByName);
        if (start < 0)  //  Name not found
            return;
        for (int i = start; i < orderedByName.length; i += 1)
@@ -67,7 +67,6 @@ public class Controller implements Initializable
        Student key = new Student("", gradeToFind);
        
        //  Sequential search
-//       int start = Student.indexOfFirstMatchingBy(orderedByGrade, key, orderByGrade);
        int start = Arrays.binarySearch(orderedByGrade, key, compareByGrade);
        
        if (start < 0)  //  Grade not found
@@ -90,11 +89,11 @@ public class Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-//        orderByGrade = new OrderByGrade();
-        orderByName = new OrderByName();
-        
-//        compareByGrade = new ComparatorByGrade();
+        //  Create comparators needed for sorting and searching.
         compareByGrade = (s1, s2) -> Character.compare(s1.getGrade(), s2.getGrade());
+        compareByName = (s1, s2) -> s1.getName().compareTo(s2.getName());
+        //  Still need one to search for by ID
+        
         //  Add some students to the array.
         students = new Student[]
         {
@@ -104,12 +103,11 @@ public class Controller implements Initializable
             new Student("Isaac Asimov", 'B'),
             new Student("Lena Horne", 'A'),
         };
+        
         orderedByGrade = Arrays.copyOf(students, students.length);
-//        Student.sortBy(orderedByGrade, orderByGrade);
-
         Arrays.sort(orderedByGrade, compareByGrade);
         orderedByName = Arrays.copyOf(students, students.length);
-        Student.sortBy(orderedByName, orderByName);
+        Arrays.sort(orderedByName, compareByName);
 
         System.out.println("Original:         " + Arrays.toString(students));
         System.out.println("Ordered by grade: " + Arrays.toString(orderedByGrade));
