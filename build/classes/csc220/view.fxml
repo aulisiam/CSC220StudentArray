@@ -17,9 +17,9 @@
          <Button text="D" onAction="#searchForByGrade" />
          -->
          <TextField fx:id="searchForField" text="" />
-         <Button  text="Search for By Grade:" onAction="#searchForByGrade" />
-         <Button  text="Search for By Name:" onAction="#searchForByName" />
-         <Button  text="Search for by ID:" onAction="#searchForById" />
+         <Button fx:id="gradeButton" text="Search for By Grade:" onAction="#search" />
+         <Button fx:id="nameButton" text="Search for By Name:" onAction="#search" />
+         <Button fx:id="idButton" text="Search for by ID:" onAction="#search" />
      </HBox>
      <Label fx:id="errorLabel" text="" />
     <TextArea fx:id="outputArea" prefHeight="300" prefWidth="700" style="-fx-font-family: monospace;"/>

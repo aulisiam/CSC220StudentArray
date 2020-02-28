@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -23,6 +24,9 @@ public class Controller implements Initializable
     @FXML
     Label errorLabel;
     
+    @FXML
+    Button gradeButton, nameButton, idButton;
+    
     //  Comparators    
     private Comparator<Student> compareByGrade;
     private Comparator<Student> compareByName;
@@ -37,55 +41,52 @@ public class Controller implements Initializable
     {
         public String getDisplayInfo(Student s);
     }
-        
-    @FXML
-    private void searchForByGrade(ActionEvent event)
-    {
-        //Button b = (Button)event.getSource();  // "Typecast" to Button
-        char gradeToFind = searchForField.getText().charAt(0);
-        outputArea.setText("Students achieving an " + gradeToFind + "\n");
-       
-        Student key = new Student("", gradeToFind);
-
-        display(orderedByGrade, key, compareByGrade, s -> s.getName());
-    }
-    
-    @FXML
-    private void searchForByName(ActionEvent event)
-    {
-        System.out.println("Search for " + searchForField.getText());
-        outputArea.setText("");
-        String nameToFind = searchForField.getText();
-        Student key = new Student(nameToFind, ' ');
-        
-        display(orderedByName, key, compareByName, (s) -> s.toString());
- 
-    }
-    
-    @FXML
-    private void searchForById(ActionEvent event)
-    {
-        System.out.println("Search for " + searchForField.getText());
-        outputArea.setText("");
-        String idToFind = searchForField.getText();
-        try
-        {
-            Student key = new Student(Integer.parseInt(idToFind));
-            display(students, key, compareById, (s) -> s.toString());
-        }
-        catch (Exception e)
-        {
-            errorLabel.setText("Need a number for the id");
-            searchForField.setText("");
-        }
- 
-    }
             
-    private void display(Student[] index, 
-                         Student key, 
-                         Comparator<Student> comparator,
-                         Displayer displayer)
+    @FXML
+    private void search(ActionEvent event)
     {
+        System.out.println("Search for " + searchForField.getText());
+        outputArea.setText("");
+        String keyText = searchForField.getText();
+        
+        Student key;
+        Student[] index;
+        Comparator<Student> comparator;
+        Displayer displayer;
+        
+        Object source = event.getSource();
+        
+        if (source.equals(nameButton))
+        {
+            index = orderedByName;
+            key = new Student(keyText, ' ');
+            comparator = compareByName;
+            displayer = (s) -> s.toString();
+        }
+        else if (source.equals(gradeButton))
+        {
+            index = orderedByGrade;
+            key = new Student("", keyText.charAt(0));
+            comparator = compareByGrade;
+            displayer = (s) -> s.getName();
+        }
+        else  // search for by id.
+        {
+            index = students;
+            try
+            {
+                key = new Student(Integer.parseInt(keyText));
+                comparator = compareById;
+                displayer = (s) -> s.toString();
+            }
+            catch (Exception e)
+            {
+                errorLabel.setText("Need a number for the id");
+                searchForField.setText("");
+                return;
+            }
+        }
+ 
         errorLabel.setText("");
         
        //  Sequential search
@@ -94,8 +95,6 @@ public class Controller implements Initializable
        if (start < 0)  //  Grade not found
            return;
        
-       //  Here's what we were missing on Monday!
-//       while (start > 0 && orderedByGrade[start-1].getGrade() == gradeToFind)
        while (start > 0 && comparator.compare(index[start-1], key) == 0)
        {
            start -= 1;
@@ -103,7 +102,6 @@ public class Controller implements Initializable
        
        for (int i = start; i < index.length; i += 1)
        {
-//           if (orderedByGrade[i].getGrade() != gradeToFind)
             if (comparator.compare(index[i], key) != 0)
                return;
             String s = displayer.getDisplayInfo(index[i]);
