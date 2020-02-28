@@ -10,12 +10,17 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="csc220.Controller">
     <HBox>
+        <!--
          <Button text="A" onAction="#searchForByGrade" />
          <Button text="B" onAction="#searchForByGrade" />
          <Button text="C" onAction="#searchForByGrade" />
          <Button text="D" onAction="#searchForByGrade" />
-         <Label  text="Search for:" />
-         <TextField fx:id="searchForField" text="" onAction="#searchForByName" />
-    </HBox>
+         -->
+         <TextField fx:id="searchForField" text="" />
+         <Button  text="Search for By Grade:" onAction="#searchForByGrade" />
+         <Button  text="Search for By Name:" onAction="#searchForByName" />
+         <Button  text="Search for by ID:" onAction="#searchForById" />
+     </HBox>
+     <Label fx:id="errorLabel" text="" />
     <TextArea fx:id="outputArea" prefHeight="300" prefWidth="700" style="-fx-font-family: monospace;"/>
 </VBox>

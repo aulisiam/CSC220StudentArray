@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -19,10 +20,13 @@ public class Controller implements Initializable
     TextArea outputArea;
     @FXML
     TextField searchForField;
+    @FXML
+    Label errorLabel;
     
     //  Comparators    
     private Comparator<Student> compareByGrade;
     private Comparator<Student> compareByName;
+    private Comparator<Student> compareById;
     
     //  Indexes for various searches
     private Student[] students;
@@ -37,8 +41,8 @@ public class Controller implements Initializable
     @FXML
     private void searchForByGrade(ActionEvent event)
     {
-        Button b = (Button)event.getSource();  // "Typecast" to Button
-        char gradeToFind = b.getText().charAt(0);
+        //Button b = (Button)event.getSource();  // "Typecast" to Button
+        char gradeToFind = searchForField.getText().charAt(0);
         outputArea.setText("Students achieving an " + gradeToFind + "\n");
        
         Student key = new Student("", gradeToFind);
@@ -57,13 +61,33 @@ public class Controller implements Initializable
         display(orderedByName, key, compareByName, (s) -> s.toString());
  
     }
+    
+    @FXML
+    private void searchForById(ActionEvent event)
+    {
+        System.out.println("Search for " + searchForField.getText());
+        outputArea.setText("");
+        String idToFind = searchForField.getText();
+        try
+        {
+            Student key = new Student(Integer.parseInt(idToFind));
+            display(students, key, compareById, (s) -> s.toString());
+        }
+        catch (Exception e)
+        {
+            errorLabel.setText("Need a number for the id");
+            searchForField.setText("");
+        }
+ 
+    }
             
     private void display(Student[] index, 
                          Student key, 
                          Comparator<Student> comparator,
                          Displayer displayer)
     {
-       
+        errorLabel.setText("");
+        
        //  Sequential search
        int start = Arrays.binarySearch(index, key, comparator);
        
@@ -93,6 +117,7 @@ public class Controller implements Initializable
         //  Create comparators needed for sorting and searching.
         compareByGrade = (s1, s2) -> Character.compare(s1.getGrade(), s2.getGrade());
         compareByName = (s1, s2) -> s1.getName().compareTo(s2.getName());
+        compareById = (s1, s2) -> Integer.compare(s1.getId(), s2.getId());
         //  Still need one to search for by ID
         
         //  Add some students to the array.
