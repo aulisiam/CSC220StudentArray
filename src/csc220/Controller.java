@@ -18,7 +18,7 @@ public class Controller implements Initializable
     @FXML
     TextField searchForField;
     @FXML
-    TextField searchForByIDField;
+    TextField searchForByIdField;
     
     private OrderByGrade orderByGrade;
     private OrderByName orderByName;
@@ -62,7 +62,11 @@ public class Controller implements Initializable
     @FXML
     private void searchForById(ActionEvent event)
     {
-        System.out.println("Search for Id " + searchForByIDField.getText());
+        System.out.println("Search for Id #" + searchForByIdField.getText());
+        String idToFind = searchForByIdField.getText();
+        Student key = new Student(idToFind, ' ');
+        
+        outputArea.setText("Search for Id #" + idToFind + "\n" );
     }
             
     private void display(char gradeToFind)

@@ -16,8 +16,8 @@
          <Button text="D" onAction="#findDs" />
          <Label  text="Search for:" />
          <TextField fx:id="searchForField" text="" onAction="#searchForByName" />
-         <Label text="Search by ID" />
-         <TextField />
+         <Label text="Search by ID:" />
+         <TextField fx:id="searchForByIdField" text="" onAction="#searchForById"/>
     </HBox>
     <TextArea fx:id="outputArea" prefHeight="300" prefWidth="700" style="-fx-font-family: monospace;"/>
 </VBox>
