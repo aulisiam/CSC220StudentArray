@@ -65,6 +65,7 @@ public class Controller implements Initializable
     private void searchForById(ActionEvent event)
     {
         System.out.println("Search for Id " + searchForByIdField.getText());
+<<<<<<< Updated upstream
         String idToFind = searchForByIdField.getText();
         Student key = new Student(Integer.parseInt(idToFind));
         
@@ -83,6 +84,10 @@ public class Controller implements Initializable
                 outputArea.appendText(orderedById[i].toString() + "\n");
            }
        }
+=======
+        int id = searchForByIdField.getText();
+        Student key = new Student(id);
+>>>>>>> Stashed changes
     }
             
     private void display(char gradeToFind)

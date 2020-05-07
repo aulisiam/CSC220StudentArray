@@ -17,7 +17,11 @@
          <Label  text="Search for:" />
          <TextField fx:id="searchForField" text="" onAction="#searchForByName" />
          <Label text="Search by ID:" />
+<<<<<<< Updated upstream
          <TextField fx:id="searchForByIdField" text="" onAction="#searchForById"/>
+=======
+         <TextField fx:id="searchForByIdField" text="" onAction="#searchForById" />
+>>>>>>> Stashed changes
     </HBox>
     <TextArea fx:id="outputArea" prefHeight="300" prefWidth="700" style="-fx-font-family: monospace;"/>
 </VBox>
