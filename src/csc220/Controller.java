@@ -22,10 +22,12 @@ public class Controller implements Initializable
     
     private OrderByGrade orderByGrade;
     private OrderByName orderByName;
+    private OrderById orderById;
     
     private Student[] students;
     private Student[] orderedByGrade;
     private Student[] orderedByName;
+    private Student[] orderedById;
     
     @FXML
     private void findAs(ActionEvent event){display('A');}
@@ -62,11 +64,25 @@ public class Controller implements Initializable
     @FXML
     private void searchForById(ActionEvent event)
     {
-        System.out.println("Search for Id #" + searchForByIdField.getText());
+        System.out.println("Search for Id " + searchForByIdField.getText());
         String idToFind = searchForByIdField.getText();
-        Student key = new Student(idToFind, ' ');
+        Student key = new Student(Integer.parseInt(idToFind));
         
-        outputArea.setText("Search for Id #" + idToFind + "\n" );
+        outputArea.setText("Search for Id " + idToFind + "\n" );
+        
+        //Sequential Search
+        int start = Student.indexOfFirstMatchingBy(orderedById, key, orderById);
+        if (start < 0)
+        {
+            return;
+        }
+        for (int i = start; i < orderedById.length; i += 1)
+       {
+           if (!orderedById[i].getId() != idToFind)
+           {
+                outputArea.appendText(orderedById[i].toString() + "\n");
+           }
+       }
     }
             
     private void display(char gradeToFind)
@@ -110,6 +126,5 @@ public class Controller implements Initializable
         System.out.println("Ordered by grade: " + Arrays.toString(orderedByGrade));
         System.out.println("Ordered by name:  " + Arrays.toString(orderedByName));
     }
-
     
 }
